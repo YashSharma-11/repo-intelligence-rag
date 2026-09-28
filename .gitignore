@@ -1,0 +1,41 @@
+HELP.md
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### IntelliJ IDEA ###
+.idea/
+*.iws
+*.iml
+*.ipr
+
+### Eclipse ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### VS Code ###
+.vscode/
+
+### Mac / Windows ###
+.DS_Store
+Thumbs.db
+
+### App runtime data ###
+# Local vector store + cloned repositories created at runtime
+.repo-intel/
+# Runtime logs when launching the packaged jar
+app.log
+app.err.log
+
+### Secrets ###
+.env
+*.env
+
+### Large model binary (downloaded via scripts/download-model.sh) ###
+src/main/resources/onnx/model.onnx

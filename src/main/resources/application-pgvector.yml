@@ -1,0 +1,21 @@
+# Production profile: Postgres/Pgvector-backed vector store + Redis.
+# Build and run with the matching Maven profile:
+#   docker compose up -d
+#   mvn -Ppgvector spring-boot:run -Dspring-boot.run.profiles=pgvector
+spring:
+  datasource:
+    url: ${POSTGRES_URL:jdbc:postgresql://localhost:5432/repointel}
+    username: ${POSTGRES_USER:repointel}
+    password: ${POSTGRES_PASSWORD:repointel}
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+  ai:
+    vectorstore:
+      pgvector:
+        initialize-schema: true
+        index-type: HNSW
+        distance-type: COSINE_DISTANCE
+        # all-MiniLM-L6-v2 produces 384-dimensional embeddings.
+        dimensions: 384

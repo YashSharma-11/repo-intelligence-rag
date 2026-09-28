@@ -1,0 +1,49 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: repo-intel-rag
+  ai:
+    # Local ONNX embedding model (all-MiniLM-L6-v2). Runs offline, no API key.
+    # Model + tokenizer are bundled under src/main/resources/onnx.
+    embedding:
+      transformer:
+        tokenizer:
+          uri: classpath:/onnx/tokenizer.json
+        onnx:
+          model-uri: classpath:/onnx/model.onnx
+    # Chat model via any OpenAI-compatible endpoint.
+    # Default targets Groq (free tier). Override base-url/api-key/model with env vars.
+    openai:
+      api-key: ${LLM_API_KEY:changeme}
+      base-url: ${LLM_BASE_URL:https://api.groq.com/openai}
+      chat:
+        options:
+          model: ${LLM_MODEL:llama-3.3-70b-versatile}
+          temperature: 0.2
+          # Cap the completion so (input + output) stays within the model's
+          # context window; prevents Groq "reduce the length" 400 errors.
+          max-tokens: ${LLM_MAX_TOKENS:800}
+      # We only use OpenAI for chat; embeddings are served locally by the transformers model.
+      embedding:
+        enabled: false
+
+repo-intel:
+  # Where cloned repositories and the persisted vector store live.
+  work-dir: ${REPO_INTEL_WORK_DIR:${user.home}/.repo-intel}
+  ingest:
+    # File extensions that are treated as source code and indexed.
+    code-extensions: .java,.py,.js,.ts,.tsx,.jsx,.go,.rb,.cs,.cpp,.c,.h,.hpp,.rs,.kt,.php,.scala,.swift
+    max-file-size-bytes: 500000
+    # Target chunk size (in characters) for the structural chunker fallback.
+    max-chunk-chars: 1600
+    chunk-overlap-chars: 200
+  retrieval:
+    top-k: ${RETRIEVAL_TOP_K:6}
+    # Weight of keyword (lexical) score when fusing with semantic score.
+    keyword-weight: 0.3
+
+logging:
+  level:
+    com.yashsharma.repointel: INFO
