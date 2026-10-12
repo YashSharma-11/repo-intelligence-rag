@@ -39,3 +39,5 @@ app.err.log
 
 ### Large model binary (downloaded via scripts/download-model.sh) ###
 src/main/resources/onnx/model.onnx
+yash
+yash.pub
