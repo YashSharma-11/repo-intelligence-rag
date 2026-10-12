@@ -181,6 +181,25 @@ Open http://localhost:5173. The Vite dev server proxies `/api` calls to the back
 
 ---
 
+## Deploying the web portal
+
+Vercel and Netlify can host the React portal, but the Spring Boot API must run as a
+separate service. Deploy the repository's Dockerfile to a container host such as Render
+or Railway, then deploy `frontend/` as a static site on Vercel or Netlify.
+
+For the static site, set the project root to `frontend`, the build command to
+`npm run build`, and the output directory to `dist`. Set `VITE_API_BASE_URL` to the
+public base URL of the API (for example, `https://your-api.example.com`, with no `/api`).
+
+For the API service, set `LLM_API_KEY` and `CORS_ALLOWED_ORIGINS` to the exact public
+portal origin (for example, `https://your-project.vercel.app`). The Docker image defaults
+to the no-database profile; use a persistent disk and set `REPO_INTEL_WORK_DIR` to its
+mount path if ingested repositories should survive service restarts. For a database-backed
+deployment, build with `MAVEN_PROFILE=pgvector`, activate `SPRING_PROFILES_ACTIVE=pgvector`,
+and provide the Postgres and Redis settings described in `application-pgvector.yml`.
+
+---
+
 ## API
 
 | Method | Path          | Body                                   | Description                           |

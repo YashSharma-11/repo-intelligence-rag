@@ -1,8 +1,9 @@
 // Thin API client for the Repo Intelligence backend.
 // Uses relative URLs so the Vite dev proxy (or same-origin prod build) handles routing.
+const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || '').replace(/\/+$/, '');
 
 async function postJson(path, body) {
-  const res = await fetch(path, {
+  const res = await fetch(`${API_BASE_URL}${path}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body),
